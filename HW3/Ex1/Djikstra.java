@@ -1,6 +1,5 @@
-//Aidan Mellin
-package git.CSCI261.HW3;
 
+//Aidan Mellin
 import java.io.*;
 import java.util.*;
 
@@ -76,31 +75,6 @@ public class Djikstra {
             edgeNeighbors(u);
         }
     }
-
-    // public void quickSort(ArrayList<Integer> arr, int b, int e) {
-    // if (b < e) {
-    // int partitionIndex = partition(arr, b, e);
-
-    // quickSort(arr, b, partitionIndex - 1);
-    // quickSort(arr, partitionIndex + 1, e);
-
-    // }
-    // }
-
-    // private int partition(ArrayList<Integer> arr, int b, int e) {
-    // int pivot = arr.get(e);
-    // int i = (b - 1);
-
-    // for (int j = b; j < e - 1; j++) {
-    // if (arr.get(j) < pivot) {
-    // i++;
-    // Collections.swap(arr, i, j);
-    // }
-    // }
-    // Collections.swap(arr, i + 1, e);
-
-    // return i + 1;
-    // }
 
     public void bubblesort(ArrayList<Node> arr) {
         int len = arr.size();

@@ -1,11 +1,11 @@
-//Aidan Mellin
-package git.CSCI261.HW3;
+package git.CSCI261.HW3.Ex2;
 
 import java.io.*;
 import java.util.*;
 
 class Node implements Comparator<Node> {
     public int n;
+    public String name;
     public int cost;
     public int path;
     public int dist;
@@ -13,10 +13,11 @@ class Node implements Comparator<Node> {
     public Node() {
     }
 
-    public Node(int node, int cost) {
+    public Node(int node, int cost, String name) {
         this.n = node;
         this.cost = cost;
         this.path = Integer.MAX_VALUE;
+        this.name = name;
     }
 
     public int compare(Node n1, Node n2) {
@@ -24,15 +25,14 @@ class Node implements Comparator<Node> {
     }
 }
 
-public class Djikstra {
-
+public class WordLadder {
     private int dst[];
     private Set<Integer> sets;
     private PriorityQueue<Node> queue;
     private int VERTICES;
     List<List<Node>> adj;
 
-    public Djikstra(int v) {
+    public WordLadder(int v) {
         this.VERTICES = v;
         this.dst = new int[v];
         this.sets = new HashSet<Integer>();
@@ -53,7 +53,7 @@ public class Djikstra {
                     dst[v.n] = nDist;
                     v.path = w;
                 }
-                queue.add(new Node(v.n, dst[v.n]));
+                queue.add(new Node(v.n, dst[v.n], v.name));
             }
         }
     }
@@ -65,42 +65,22 @@ public class Djikstra {
             dst[i] = Integer.MAX_VALUE;
 
         // Add src node to the queue
-        queue.add(new Node(src, 0));
+        queue.add(new Node(src, 0, ""));
 
         // Initialize dist to 0
         dst[src] = 0;
         while (sets.size() != VERTICES) {
             // Remove minimum distance
-            int u = queue.remove().n;
+            int u = 0;
+            if (!queue.isEmpty())
+                u = queue.remove().n;
+            else
+                break;
+
             sets.add(u);
             edgeNeighbors(u);
         }
     }
-
-    // public void quickSort(ArrayList<Integer> arr, int b, int e) {
-    // if (b < e) {
-    // int partitionIndex = partition(arr, b, e);
-
-    // quickSort(arr, b, partitionIndex - 1);
-    // quickSort(arr, partitionIndex + 1, e);
-
-    // }
-    // }
-
-    // private int partition(ArrayList<Integer> arr, int b, int e) {
-    // int pivot = arr.get(e);
-    // int i = (b - 1);
-
-    // for (int j = b; j < e - 1; j++) {
-    // if (arr.get(j) < pivot) {
-    // i++;
-    // Collections.swap(arr, i, j);
-    // }
-    // }
-    // Collections.swap(arr, i + 1, e);
-
-    // return i + 1;
-    // }
 
     public void bubblesort(ArrayList<Node> arr) {
         int len = arr.size();
@@ -136,23 +116,27 @@ public class Djikstra {
             String line;
 
             // Total number of vertices
-            V = Integer.parseInt(fp.readLine().replaceAll("\\s", ""));
+            V = Integer.parseInt(fp.readLine().replaceAll("\\s# number of words", ""));
 
             // Initialize list for every node
             for (int i = 0; i < V; i++) {
                 List<Node> item = new ArrayList<Node>();
                 adj.add(item);
-                interpreted.put(i, new Node(i, Integer.MAX_VALUE));
+                interpreted.put(i, new Node(i, Integer.MAX_VALUE, ""));
             }
             // Read through the file, process inputs. Add all inputs to a blank adj list
             while ((line = fp.readLine()) != null) {
                 String nodeLine[] = line.split(" ");
+                if (nodeLine.length < 2)
+                    break;
                 int currNode = Integer.parseInt(nodeLine[0].replaceAll("Node\\[(.*?)\\]:", "$1")) - 1;
                 List<String> edges = new ArrayList<String>(Arrays.asList(nodeLine));
+                String name = edges.get(1);
+                edges.remove(0);
                 edges.remove(0);
                 for (String s : edges)
-                    adj.get(currNode)
-                            .add(new Node(Integer.parseInt(s.split(":")[0]) - 1, Integer.parseInt(s.split(":")[1])));
+                    adj.get(currNode).add(
+                            new Node(Integer.parseInt(s.split(":")[0]) - 1, Integer.parseInt(s.split(":")[1]), name));
             }
             fp.close();
         } catch (Exception e) {
@@ -160,13 +144,13 @@ public class Djikstra {
         }
 
         // Calculate the single source shortest path
-        Djikstra djk = new Djikstra(V);
-        djk.driver(source, adj);
+        WordLadder wld = new WordLadder(V);
+        wld.driver(source, adj);
 
         // Populate the hashmap with the best paths
         for (List<Node> i : adj) {
             for (Node n : i) {
-                n.dist = djk.dst[n.n];
+                n.dist = wld.dst[n.n];
                 interpreted.replace(n.n, (n.cost < interpreted.get(n.n).cost) ? n : interpreted.get(n.n));
             }
         }
@@ -175,12 +159,12 @@ public class Djikstra {
 
         // Print the shortest path to all the nodes
         // from the source node
-        for (int i = 0; i < djk.dst.length; i++) {
+        for (int i = 0; i < wld.dst.length; i++) {
             Node n = interpreted.get(i);
             arr.add(n);
         }
 
-        djk.bubblesort(arr);
+        wld.bubblesort(arr);
         // Printing the ordered Nodes (by distance)
         for (Node n : arr) {
             if (n.dist == 0) {
@@ -190,7 +174,7 @@ public class Djikstra {
                 if (n.path > V + 1)
                     // *and here
                     n.path = 0;
-                System.out.println((n.n + 1) + " dist: " + n.dist + " path: " + (n.path + 1));
+                System.out.println((n.n + 1) + " with name " + n.name + " dist: " + n.dist + " path: " + (n.path + 1));
             }
 
         }
