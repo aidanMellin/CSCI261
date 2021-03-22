@@ -1,3 +1,4 @@
+//Aidan Mellin
 package git.CSCI261.HW3.Ex2;
 
 import java.io.*;
@@ -5,10 +6,10 @@ import java.util.*;
 
 class Node implements Comparator<Node> {
     public int n;
-    public String name;
     public int cost;
     public int path;
     public int dist;
+    public String name;
 
     public Node() {
     }
@@ -26,10 +27,12 @@ class Node implements Comparator<Node> {
 }
 
 public class WordLadder {
+
     private int dst[];
     private Set<Integer> sets;
     private PriorityQueue<Node> queue;
     private int VERTICES;
+    public String name;
     List<List<Node>> adj;
 
     public WordLadder(int v) {
@@ -71,14 +74,13 @@ public class WordLadder {
         dst[src] = 0;
         while (sets.size() != VERTICES) {
             // Remove minimum distance
-            int u = 0;
-            if (!queue.isEmpty())
-                u = queue.remove().n;
-            else
+            if (queue.peek() != null) {
+                int u = queue.remove().n;
+                sets.add(u);
+                edgeNeighbors(u);
+            } else {
                 break;
-
-            sets.add(u);
-            edgeNeighbors(u);
+            }
         }
     }
 
@@ -96,6 +98,7 @@ public class WordLadder {
     public static void main(String[] args) {
         int V = 0;
         int source;
+        String sourceName;
 
         if (args.length > 1) {
             source = Integer.parseInt(args[1]) - 1;
@@ -116,7 +119,7 @@ public class WordLadder {
             String line;
 
             // Total number of vertices
-            V = Integer.parseInt(fp.readLine().replaceAll("\\s# number of words", ""));
+            V = Integer.parseInt(fp.readLine().replaceAll(" # number of words", ""));
 
             // Initialize list for every node
             for (int i = 0; i < V; i++) {
@@ -127,16 +130,17 @@ public class WordLadder {
             // Read through the file, process inputs. Add all inputs to a blank adj list
             while ((line = fp.readLine()) != null) {
                 String nodeLine[] = line.split(" ");
-                if (nodeLine.length < 2)
-                    break;
-                int currNode = Integer.parseInt(nodeLine[0].replaceAll("Node\\[(.*?)\\]:", "$1")) - 1;
-                List<String> edges = new ArrayList<String>(Arrays.asList(nodeLine));
-                String name = edges.get(1);
-                edges.remove(0);
-                edges.remove(0);
-                for (String s : edges)
-                    adj.get(currNode).add(
-                            new Node(Integer.parseInt(s.split(":")[0]) - 1, Integer.parseInt(s.split(":")[1]), name));
+                if (!(nodeLine.length < 2)) {
+                    int currNode = Integer.parseInt(nodeLine[0].replaceAll("Node\\[(.*?)\\]:", "$1")) - 1;
+                    String currNodeName = nodeLine[1];
+                    System.out.printf("currNode num: %d\tname: %s\n", currNode, currNodeName);
+                    List<String> edges = new ArrayList<String>(Arrays.asList(nodeLine));
+                    edges.remove(0);
+                    edges.remove(0);
+                    for (String s : edges)
+                        adj.get(currNode).add(new Node(Integer.parseInt(s.split(":")[0]) - 1,
+                                Integer.parseInt(s.split(":")[1]), currNodeName));
+                }
             }
             fp.close();
         } catch (Exception e) {
@@ -151,7 +155,8 @@ public class WordLadder {
         for (List<Node> i : adj) {
             for (Node n : i) {
                 n.dist = wld.dst[n.n];
-                interpreted.replace(n.n, (n.cost < interpreted.get(n.n).cost) ? n : interpreted.get(n.n));
+                if (n.name != interpreted.get(n.n).name)
+                    interpreted.replace(n.n, (n.cost < interpreted.get(n.n).cost) ? n : interpreted.get(n.n));
             }
         }
 
@@ -161,21 +166,22 @@ public class WordLadder {
         // from the source node
         for (int i = 0; i < wld.dst.length; i++) {
             Node n = interpreted.get(i);
-            arr.add(n);
+            if (!arr.contains(n))
+                arr.add(n);
         }
 
-        wld.bubblesort(arr);
+        // wld.bubblesort(arr);
         // Printing the ordered Nodes (by distance)
         for (Node n : arr) {
-            if (n.dist == 0) {
-                // Currently if the path is 0 it stays as MAX_INT, so I account for that here*
-                System.out.println(n.n + 1 + " dist: " + n.dist + " path: null");
-            } else {
-                if (n.path > V + 1)
-                    // *and here
-                    n.path = 0;
-                System.out.println((n.n + 1) + " with name " + n.name + " dist: " + n.dist + " path: " + (n.path + 1));
-            }
+
+            // if (n.path > V + 1)
+            // // *and here
+            // n.path = 0;
+            if (interpreted.get(n.path) != null)
+                System.out.println((n.n) + " name: " + n.name + " dist: " + n.dist + " path from: "
+                        + interpreted.get(n.path).name);
+            else
+                System.out.println(interpreted.get(source).name);
 
         }
     }
