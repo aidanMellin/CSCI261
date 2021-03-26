@@ -8,6 +8,8 @@ import jdk.incubator.foreign.ValueLayout;
 public class Kruskal {
     static Edge edgeList[];
     static int vCount, eCount;
+    public boolean outToFile;
+    public String out;
 
     class Sub {
         int root, rank;
@@ -38,8 +40,10 @@ public class Kruskal {
         }
     }
 
-    static void file_process(String fn) {
+    static void file_process(String[] args) {
         try {
+            String fn = args[0];
+
             File f = new File(fn);
             BufferedReader fp = new BufferedReader(new FileReader(f));
             String line;
@@ -47,6 +51,11 @@ public class Kruskal {
             int i = 0;
             eCount = vCount * (vCount - 1);
             Kruskal krusk = new Kruskal(eCount);
+            if (args.length > 1) {
+                krusk.outToFile = true;
+                krusk.out = args[1];
+            } else
+                krusk.outToFile = false;
 
             while ((line = fp.readLine()) != null) {
                 String splitLine[] = line.split(" ");
@@ -125,12 +134,33 @@ public class Kruskal {
             }
 
         }
-        System.out.println(true);
+        int tCost = 0;
+        if (outToFile) {
+            for (Edge e : res) {
+                if (e.weight != 0)
+                    System.out.println(String.format("(%d,%d) :%d", e.src + 1, e.dst + 1, e.weight));
+                tCost += e.weight;
+            }
+            System.out.println("Total Cost: " + tCost);
+        } else {
+            try {
+                FileWriter write = new FileWriter(out);
+                for (Edge e : res) {
+                    if (e.weight != 0)
+                        write.write(String.format("(%d,%d) :%d", e.src + 1, e.dst + 1, e.weight));
+                    tCost += e.weight;
+                }
+                write.write("Total Cost: " + tCost);
+                write.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     public static void main(String[] args) {
-        String fn = args[0];
-        file_process(fn);
+        file_process(args);
     }
 
 }
