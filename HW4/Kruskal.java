@@ -45,9 +45,8 @@ public class Kruskal {
             String line;
             vCount = Integer.parseInt(fp.readLine());
             int i = 0;
-            edgeList = new Edge[vCount * (vCount - 1)];
-            for (int j = 0; j < edgeList.length; j++)
-                edgeList[j] = new Edge();
+            eCount = vCount * (vCount - 1);
+            Kruskal krusk = new Kruskal(eCount);
 
             while ((line = fp.readLine()) != null) {
                 String splitLine[] = line.split(" ");
@@ -63,6 +62,8 @@ public class Kruskal {
                 }
             }
             fp.close();
+            krusk.constructMST();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -124,15 +125,12 @@ public class Kruskal {
             }
 
         }
+        System.out.println(true);
     }
 
     public static void main(String[] args) {
         String fn = args[0];
-
-        int e = edgeList.length;
-        Kruskal krusk = new Kruskal(e);
         file_process(fn);
-        krusk.constructMST();
     }
 
 }
