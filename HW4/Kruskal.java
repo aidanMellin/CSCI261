@@ -1,9 +1,6 @@
 package git.CSCI261.HW4;
 
 import java.io.*;
-import java.util.*;
-
-import jdk.incubator.foreign.ValueLayout;
 
 public class Kruskal {
     static Edge edgeList[];
@@ -60,10 +57,9 @@ public class Kruskal {
             while ((line = fp.readLine()) != null) {
                 String splitLine[] = line.split(" ");
                 int source = Integer.parseInt(splitLine[0].replaceAll("Node\\[(.*?)\\]:", "$1")) - 1;
-                List<String> content = new ArrayList<String>(Arrays.asList(splitLine));
-                content.remove(0);
-                for (int s = 0; s < content.size(); s++) {
-                    String tmp[] = content.get(s).split(":");
+
+                for (int s = 1; s < splitLine.length; s++) {
+                    String tmp[] = splitLine[s].split(":");
                     edgeList[i].src = source;
                     edgeList[i].dst = Integer.parseInt(tmp[0]) - 1;
                     edgeList[i].weight = Integer.parseInt(tmp[1]);
@@ -110,15 +106,16 @@ public class Kruskal {
 
     void constructMST() {
         Edge res[] = new Edge[vCount];
+        Sub set[] = new Sub[vCount];
+
         int index = 0;
         int i = 0;
-        for (i = 0; i < vCount; i++)
+        for (i = 0; i < vCount; i++) {
             res[i] = new Edge();
-        Arrays.sort(edgeList);
-
-        Sub set[] = new Sub[vCount];
-        for (i = 0; i < vCount; i++)
             set[i] = new Sub(i);
+        }
+
+        quicksort();
 
         i = 0;
         while (index < vCount - 1) {
@@ -135,7 +132,7 @@ public class Kruskal {
 
         }
         int tCost = 0;
-        if (outToFile) {
+        if (!outToFile) {
             for (Edge e : res) {
                 if (e.weight != 0)
                     System.out.println(String.format("(%d,%d) :%d", e.src + 1, e.dst + 1, e.weight));
