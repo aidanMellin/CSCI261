@@ -1,6 +1,4 @@
 //Author Aidan Mellin
-package git.CSCI261.HW4;
-
 import java.io.*;
 
 public class Kruskal {
@@ -145,10 +143,10 @@ public class Kruskal {
                 FileWriter write = new FileWriter(out);
                 for (Edge e : res) {
                     if (e.weight != 0)
-                        write.write(String.format("(%d,%d) :%d", e.src + 1, e.dst + 1, e.weight));
+                        write.write(String.format("(%d,%d):%d\n", e.src + 1, e.dst + 1, e.weight));
                     tCost += e.weight;
                 }
-                write.write("Total Cost: " + tCost);
+                write.write("Total Cost: " + tCost + "\n");
                 write.close();
             } catch (Exception e) {
                 e.printStackTrace();

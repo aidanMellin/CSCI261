@@ -1,5 +1,4 @@
-package git.CSCI261.HW4;
-
+//Author Aidan Mellin
 public class DisjSize extends DisjSets {
     private int[] sets;
 

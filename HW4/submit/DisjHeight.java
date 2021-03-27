@@ -1,6 +1,4 @@
 //Author Aidan Mellin
-package git.CSCI261.HW4;
-
 public class DisjHeight extends DisjSets {
 
     /*
@@ -22,7 +20,7 @@ public class DisjHeight extends DisjSets {
         }
     }
 
-    public void union(int r1, int r2) {
+    public void union(int r1, int r2) { // Union based on tree height
         if (sets[r1] <= sets[r2]) {
             if (-sets[r1] < (-sets[r2] + 1))
                 sets[r1]--;
@@ -34,7 +32,7 @@ public class DisjHeight extends DisjSets {
         }
     }
 
-    public int find(int node) {
+    public int find(int node) { // Find the root of the node
         if (sets[node] <= -1)
             return node;
         else

@@ -1,21 +1,21 @@
-package git.CSCI261.HW4;
+//Author Aidan Mellin
+public class DisjSets {
+    public int[] sets;
 
-public class DisjSize extends DisjSets {
-    private int[] sets;
-
-    DisjSize(int n) {
-        super(n);
+    public DisjSets(int n) {
         sets = new int[n];
-        for (int i = 0; i < sets.length; i++) {
+        for (int i = 0; i < sets.length; i++)
             sets[i] = -1;
-        }
+    }
+
+    public void union(int r1, int r2) {
+        sets[r2] = r1;
     }
 
     public int find(int node) {
         if (sets[node] < 0)
             return node;
         return find(sets[node]);
-
     }
 
     int findC(int elt) {
@@ -27,18 +27,6 @@ public class DisjSize extends DisjSets {
             return elt;
         else
             return sets[elt] = find(sets[elt]);
-    }
-
-    public void union(int r1, int r2) { // Union by rank
-        int Root1 = findC(r1);
-        int Root2 = findC(r2);
-        if (sets[Root1] > sets[Root2]) {
-            sets[Root2] += sets[Root1];
-            sets[Root1] = Root2;
-        } else {
-            sets[Root1] += sets[Root2];
-            sets[Root2] = Root1;
-        }
     }
 
     public String toString() {
@@ -56,10 +44,9 @@ public class DisjSize extends DisjSets {
 
     int size() {
         /* Returns the number of dijoint sets currently in this object */
-        int count = 1;
+        int count = 0;
         for (int i : this.sets)
             count = (i == -1) ? count + 1 : count;
         return count;
     }
-
 }
