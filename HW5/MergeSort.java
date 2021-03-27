@@ -1,10 +1,7 @@
-package git.CSCI261.HW5;
-
 import java.util.*;
 import java.io.*;
 
 public class MergeSort {
-
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner sc = new Scanner(new File(args[0]));
 		// get the size of the array
@@ -12,6 +9,7 @@ public class MergeSort {
 
 		// construct array and fill
 		int[] a = new int[n];
+
 		for (int i = 0; i < n; i++)
 			a[i] = sc.nextInt();
 
@@ -19,6 +17,7 @@ public class MergeSort {
 
 		mergeSort(a, 0, a.length - 1);
 		// if array length < 20, print it
+
 		if (n < 20)
 			System.out.println(Arrays.toString(a));
 		// else for longer arrays, check the ordering
@@ -46,26 +45,28 @@ public class MergeSort {
 	}
 
 	public static void mergeSort(int[] a, int start, int end) {
-		if (a.length > 2) {
-			int mid = a.length / 2; // Find the middle of the array
-			int startA[] = new int[mid]; // Left part of array (Start -> mid)
-			int endA[] = new int[a.length - mid]; // Right part of array (Mid+1 -> end)
-			int mergeIndex = 0; // The new index for the values
-			for (int i = 0; i < a.length; i++) {
-				// Asign values into new arrays based around value of mid
-				if (i < mid)
-					startA[i] = a[i];
-				else {
-					endA[mergeIndex] = a[i];
-					mergeIndex += 1;
-				}
+		if (a.length < 2) {return;}
+
+		int mid = a.length / 2; // Find the middle of the array
+		int startA[] = new int[mid]; // Left part of array (Start -> mid)
+		int endA[] = new int[a.length - mid]; // Right part of array (Mid+1 -> end)
+		int mergeIndex = 0; // The new index for the values
+		for (int i = 0; i < a.length; i++) {
+			// Asign values into new arrays based around value of mid
+			if (i < mid)
+				startA[i] = a[i];
+			else {
+				endA[mergeIndex] = a[i];
+				mergeIndex += 1;
 			}
-			// Recursively call until there are two values per arr being compared and then
-			// merge the result
-			mergeSort(startA, start, mid);
-			mergeSort(endA, mid + 1, end);
-			merge(a, startA, endA, mid, a.length - mid);
 		}
+		// Recursively call until there are two values per arr being compared and then
+		// merge the result
+		mergeSort(startA, start, mid);
+		mergeSort(endA, mid + 1, end);
+		merge(a, startA, endA, mid, a.length - mid);
+
+
 	}
 
 }
