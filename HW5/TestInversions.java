@@ -13,9 +13,9 @@ public class TestInversions {
 
 	int [] b = Arrays.copyOf(a, a.length); // save for use by brute
 
-	System.out.println("Using Inversions.inversions");	
+	System.out.println("Using Inversions.inversions");
         long start = System.currentTimeMillis();
-	int inversions = Inversions.inversions(a);
+	long inversions = Inversions.inversions(a);
 	long stop = System.currentTimeMillis();
 
         if (n < 20)
@@ -30,8 +30,8 @@ public class TestInversions {
         if (n < 20)
            System.out.println("List: " + Arrays.toString(a));
 	System.out.println("Inversions: " + inversions);
-	System.out.println("Time: " + (stop-start) + " ms");	
-	
+	System.out.println("Time: " + (stop-start) + " ms");
+
     }
 
     public static int bruteInversions(int [] a) {
@@ -43,4 +43,3 @@ public class TestInversions {
 	return count;
     }
 }
-
