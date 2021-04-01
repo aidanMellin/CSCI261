@@ -6,10 +6,19 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch TestInversions",
+            "request": "launch",
+            "mainClass": "TestInversions",
+            "projectName": "HW5_59c36484",
+            "args": "in/12.in"
+        },
+        {
+            "type": "java",
             "name": "Launch MergeSort",
             "request": "launch",
             "mainClass": "MergeSort",
-            "projectName": "HW5_59c36484"
+            "projectName": "HW5_59c36484",
+            "args": "in/12.in"
         },
         {
             "type": "java",

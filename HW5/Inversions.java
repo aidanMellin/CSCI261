@@ -1,59 +1,55 @@
-import java.util.*;
-import java.io.*;
-
 public class Inversions {
     
     public static long inversions(int a[]){
-        mergeSort(a, 0, a.length-1);
-        return 0;
+		int tmp[] = new int[a.length];
+        return mergeSort(a, tmp, 0, a.length-1);
     }
 
-	public static void merge(int a[], int sA[], int eA[], int sSize, int eSize) {
-		int i = 0, sIndex = 0, eIndex = 0, count = 0; // Establish indices
-		while (sIndex < sSize && eIndex < eSize) {
-			if (sA[sIndex] < eA[eIndex]){
-				a[i++] = sA[sIndex++];
-                count+=1;
+	public static int merge(int a[], int tmp[], int start, int mid, int end) {
+		int i, j, k;
+		int inv_count = 0;
+		i = start; /* i is index for start subarray*/
+        j = mid; /* j is index for end subarray*/
+        k = start; /* k is index for resultant merged subarray*/
+        while ((i <= mid - 1) && (j <= end)) {
+            if (a[i] <= a[j]) {
+                tmp[k++] = a[i++];
             }
-			else{
-				a[i++] = eA[eIndex++];
-                count+=1;
-		    }
+            else {
+                tmp[k++] = a[j++];
+  
+                /*this is tricky -- see above explanation/diagram for merge()*/
+                inv_count = inv_count + (mid - i);
+            }
         }
-		// Add the remaining values (if any)
-		while (sIndex < sSize){
-			a[i++] = sA[sIndex++];
-            count+=1;
-        }
-		while (eIndex < eSize){
-			a[i++] = eA[eIndex++];
-            count+=1;
-        }
-        System.out.println(count);
+  
+        /* Copy the remaining elements of start subarray
+       (if there are any) to tmp*/
+        while (i <= mid - 1)
+            tmp[k++] = a[i++];
+  
+        /* Copy the remaining elements of end subarray
+       (if there are any) to tmp*/
+        while (j <= end)
+            tmp[k++] = a[j++];
+  
+        /*Copy back the merged elements to original aay*/
+        for (i = start; i <= end; i++)
+            a[i] = tmp[i];
+  
+        return inv_count;
 	}
 
-	public static void mergeSort(int[] a, int start, int end) {
-		if (a.length < 2) {return;}
-		int mid = a.length / 2; // Find the middle of the array
-		int startA[] = new int[mid]; // Left part of array (Start -> mid)
-		int endA[] = new int[a.length - mid]; // Right part of array (Mid+1 -> end)
-		int mergeIndex = 0; // The new index for the values
-		for (int i = 0; i < a.length; i++) {
-			// Asign values into new arrays based around value of mid
-			if (i < mid)
-				startA[i] = a[i];
-			else {
-				endA[mergeIndex] = a[i];
-				mergeIndex += 1;
-			}
+	public static int mergeSort(int[] a, int tmp[], int start, int end) {
+		int mid, inv_count = 0;
+		if(start < end){
+			mid = (start + end) / 2;
+			inv_count = mergeSort(a, tmp, start, mid);
+			inv_count += mergeSort(a, tmp, mid+1, end);
+
+			inv_count += merge(a, tmp, start, mid+1, end);
 		}
-		// Recursively call until there are two values per arr being compared and then
-		// merge the result
-		mergeSort(startA, start, mid);
-		mergeSort(endA, mid + 1, end);
-		merge(a, startA, endA, mid, a.length - mid);
-
-
+		return inv_count;
 	}
 
 }

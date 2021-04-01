@@ -13,11 +13,13 @@ public class MergeSort {
 		for (int i = 0; i < n; i++)
 			a[i] = sc.nextInt();
 
+		//Create a blank tmp array for merging values (same size as a)
+		int tmp[] = new int[a.length];
+		
 		// mergeSort the array
-
-		mergeSort(a, 0, a.length - 1);
+		mergeSort(a,tmp, 0, a.length - 1);
+		
 		// if array length < 20, print it
-
 		if (n < 20)
 			System.out.println(Arrays.toString(a));
 		// else for longer arrays, check the ordering
@@ -29,41 +31,49 @@ public class MergeSort {
 		}
 	}
 
-	public static void merge(int a[], int sA[], int eA[], int sSize, int eSize) {
-		int i = 0, sIndex = 0, eIndex = 0; // Establish indices
-		while (sIndex < sSize && eIndex < eSize) {
-			if (sA[sIndex] < eA[eIndex])
-				a[i++] = sA[sIndex++];
-			else
-				a[i++] = eA[eIndex++];
-		}
-		// Add the remaining values (if any)
-		while (sIndex < sSize)
-			a[i++] = sA[sIndex++];
-		while (eIndex < eSize)
-			a[i++] = eA[eIndex++];
+	public static void merge(int a[], int tmp[], int start, int mid, int end) {
+		int i, j, k;
+		i = start; /*Index for start subarray (* -> mid)*/
+        j = mid; /* Index for end subarray (mid + 1 -> * )*/
+        k = start; /* Index for merged arr*/
+        while ((i <= mid - 1) && (j <= end)) {
+            if (a[i] <= a[j]) {
+                tmp[k++] = a[i++];
+            }
+            else
+                tmp[k++] = a[j++];
+        }
+  
+        // Copy remaining start values
+        while (i <= mid - 1)
+            tmp[k++] = a[i++];
+  
+        // Copy remaining End values
+        while (j <= end)
+            tmp[k++] = a[j++];
+  
+		// Copy all back into original array
+		for (i = start; i <= end; i++)
+            a[i] = tmp[i];
+  
 	}
 
-	public static void mergeSort(int[] a, int start, int end) {
-		if (a.length < 2) {return;}
+	public static int mergeSort(int[] a, int tmp[], int start, int end) {
+		int mid, inv_count = 0;
 
-		int mid = a.length / 2; // Find the middle of the array
-		int startA[] = new int[mid]; // Left part of array (Start -> mid)
-		int endA[] = new int[a.length - mid]; // Right part of array (Mid+1 -> end)
-		int mergeIndex = 0; // The new index for the values
-		for (int i = 0; i < a.length; i++) {
-			// Asign values into new arrays based around value of mid
-			if (i < mid)
-				startA[i] = a[i];
-			else {
-				endA[mergeIndex] = a[i];
-				mergeIndex += 1;
-			}
+		// Determine mid value
+		if(start < end){
+			mid = (start + end) / 2;
+
+		// Call mergeSort on * -> mid
+		mergeSort(a, tmp, start, mid);
+
+		// Call mergeSort on mid + 1 -> * 
+		mergeSort(a, tmp, mid+1, end);
+
+		// Merge the values found
+		merge(a, tmp, start, mid+1, end);
 		}
-		// Recursively call until there are two values per arr being compared and then
-		// merge the result
-		mergeSort(startA, start, mid);
-		mergeSort(endA, mid + 1, end);
-		merge(a, startA, endA, mid, a.length - mid);
+		return inv_count;
 	}
 }
