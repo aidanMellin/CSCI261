@@ -65,8 +65,5 @@ public class MergeSort {
 		mergeSort(startA, start, mid);
 		mergeSort(endA, mid + 1, end);
 		merge(a, startA, endA, mid, a.length - mid);
-
-
 	}
-
 }
