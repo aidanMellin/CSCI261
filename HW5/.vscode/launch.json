@@ -18,7 +18,7 @@
             "request": "launch",
             "mainClass": "MergeSort",
             "projectName": "HW5_59c36484",
-            "args": "in/12.in"
+            "args": "in/1000000.in"
         },
         {
             "type": "java",
