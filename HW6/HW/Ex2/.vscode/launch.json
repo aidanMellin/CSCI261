@@ -6,17 +6,17 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launch WeightedInterval",
-            "request": "launch",
-            "mainClass": "WeightedInterval",
-            "projectName": "Ex1_e0e4ffb0",
-            "args": "20in"
-        },
-        {
-            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch SubsetSum",
+            "request": "launch",
+            "mainClass": "SubsetSum",
+            "projectName": "Ex2_e0e4ffb1",
+            "args": "10in 28"
         }
     ]
 }

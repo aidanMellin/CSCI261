@@ -54,36 +54,53 @@ public class WeightedInterval {
 
 	/**
 	 *
-	 * @ param jobs a list of jobs sorted by finish time @ return int [] p, p[j] is
-	 * the first job to the left of jobs[j] that is compatible with jobs[j]
+	 * @ param jobs a list of jobs sorted by finish time
+	 * 
+	 * @ return int [] p, p[j] is the first job to the left of jobs[j] that is
+	 * compatible with jobs[j]
 	 */
 	public static int[] prior(Job[] jobs) {
 
-		// FINISH ME
-		return null;
+		int[] selection = new int[jobs.length];
+		for (int i = 1; i < jobs.length; i++) {
+			if (jobs[i].finish >= selection[i]) {
+				selection[i] = jobs[i].finish;
+			}
+		}
+		return selection;
 	}
 
 	/**
 	 *
-	 * param jobs - sorted by ascending finish time param p - array of indices into
-	 * jobs, jobs[p[j]] is first job to left of Job j compatible with j j - the
-	 * index of job currently under consideration to be part of the optimal solution
-	 * return max sum of weights of compatible jobs
+	 * @param jobs - sorted by ascending finish time
+	 * @param p    - array of indices into jobs, jobs[p[j]] is first job to left of
+	 *             Job j compatible with j
+	 * @param j    - the index of job currently under consideration to be part of
+	 *             the optimal solution
+	 * @return max sum of weights of compatible jobs
 	 */
 	public static int optR(Job[] jobs, int[] p, int j) {
-		// FINISH ME
-		return 0;
+		if (j == 0)
+			return 0;
+		else
+			return Math.max(jobs[j].weight + optR(jobs, p, p[j]), optR(jobs, p, j - 1));
 	}
 
 	/**
 	 *
-	 * param jobs - sorted by ascending finish time param p - array of indices into
-	 * jobs, jobs[p[j]] is first job to left of Job j compatible with j return max
-	 * sum of weights of compatible jobs
+	 * @param jobs - sorted by ascending finish time
+	 * @param p    - array of indices into jobs, jobs[p[j]] is first job to left of
+	 *             Job j compatible with j
+	 * @return max sum of weights of compatible jobs
 	 */
 	public static int optMem(Job[] jobs, int[] p) {
-		// FINISH ME
-		return 0;
+		int A[] = new int[jobs.length];
+		for (int i = 1; i < A.length; i++) {
+			for (int j = 1; j < A.length; j++) {
+				break;
+			}
+		}
+		return A[A.length - 1];
 	}
 
 	// go through array M to find and list of jobs that are part of the
