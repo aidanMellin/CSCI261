@@ -44,7 +44,7 @@ public class SubsetSum {
                 if (w < itemWts[i])
                     M[i][w] = M[i - 1][w];
                 else
-                    M[i][w] = Math.max(M[i - 1][w], itemWts[w] + M[i - 1][w - itemWts[i]]);
+                    M[i][w] = Math.max(M[i - 1][w], itemWts[i] + M[i - 1][w - itemWts[i]]);
             }
         }
         return M[itemWts.length - 1][W];

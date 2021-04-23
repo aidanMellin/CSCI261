@@ -60,11 +60,13 @@ public class WeightedInterval {
 	 * compatible with jobs[j]
 	 */
 	public static int[] prior(Job[] jobs) {
-
 		int[] selection = new int[jobs.length];
-		for (int i = 1; i < jobs.length; i++) {
-			if (jobs[i].finish >= selection[i]) {
-				selection[i] = jobs[i].finish;
+		for (int n = jobs.length - 1; n >= 2; n--) {
+			for (int i = n - 1; i >= 1; i--) {
+				if (jobs[i].finish <= jobs[n].start) {
+					selection[n] = i;
+					break;
+				}
 			}
 		}
 		return selection;
@@ -94,13 +96,10 @@ public class WeightedInterval {
 	 * @return max sum of weights of compatible jobs
 	 */
 	public static int optMem(Job[] jobs, int[] p) {
-		int A[] = new int[jobs.length];
-		for (int i = 1; i < A.length; i++) {
-			for (int j = 1; j < A.length; j++) {
-				break;
-			}
-		}
-		return A[A.length - 1];
+		int M[] = new int[jobs.length];
+		for (int j = 1; j < jobs.length; j++)
+			M[j] = Math.max(jobs[j].weight + M[p[j]], M[j - 1]);
+		return M[jobs.length - 1];
 	}
 
 	// go through array M to find and list of jobs that are part of the
@@ -113,5 +112,4 @@ public class WeightedInterval {
 		// FINISH ME
 		return;
 	}
-
 }
