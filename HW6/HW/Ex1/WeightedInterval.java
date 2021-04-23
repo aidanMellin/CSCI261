@@ -96,10 +96,15 @@ public class WeightedInterval {
 	 * @return max sum of weights of compatible jobs
 	 */
 	public static int optMem(Job[] jobs, int[] p) {
+		int[] M = calcM(jobs, p);
+		return M[jobs.length - 1];
+	}
+
+	public static int[] calcM(Job[] jobs, int[] p) {
 		int M[] = new int[jobs.length];
 		for (int j = 1; j < jobs.length; j++)
 			M[j] = Math.max(jobs[j].weight + M[p[j]], M[j - 1]);
-		return M[jobs.length - 1];
+		return M;
 	}
 
 	// go through array M to find and list of jobs that are part of the
@@ -109,7 +114,15 @@ public class WeightedInterval {
 	}
 
 	public static void showSolution(Job[] jobs, int[] p, int j) {
-		// FINISH ME
-		return;
+		int[] M = calcM(jobs, p);
+		if (j == 0)
+			System.out.println();
+		else if (jobs[j].weight + M[p[j]] > M[j - 1]) {
+			System.out.println(
+					String.format("Jobs:%d %d --> %d wt: %d", j, jobs[j].start, jobs[j].finish, jobs[j].weight));
+			showSolution(jobs, p, p[j]);
+		} else {
+			showSolution(jobs, p, j - 1);
+		}
 	}
 }

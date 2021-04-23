@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "WeightedInterval",
             "projectName": "Ex1_e0e4ffb0",
-            "args": "20in"
+            "args": "8in"
         },
         {
             "type": "java",
