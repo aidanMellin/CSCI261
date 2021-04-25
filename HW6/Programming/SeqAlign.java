@@ -18,7 +18,7 @@ public class SeqAlign {
         opt = new int[X.length() + 1][Y.length() + 1];
     }
 
-    public int OPT_D() { // Recursive
+    public int OPT_D() { // Iterative
         int optCost = Integer.MAX_VALUE;
 
         for (int i = 1; i <= seqA.length(); i++)
@@ -26,16 +26,16 @@ public class SeqAlign {
         for (int j = 1; j <= seqB.length(); j++)
             opt[0][j] = opt[0][j - 1] + gap;
 
-        // (vowels.charAt(seqA.charAt(i - 1)) == vowels.charAt(seqA.charAt(j - 1)) ?
-        // alphaSemiMatch : // Both vowels or consonants
-
         for (int i = 1; i <= seqA.length(); i++) {
             for (int j = 1; j <= seqB.length(); j++) {
                 int scoreDiag = opt[i - 1][j - 1] + (seqA.charAt(i - 1) == seqB.charAt(j - 1) ? match : // same symbol
-                        (vowels.indexOf(seqA.charAt(i - 1)) == vowels.indexOf(seqB.charAt(j - 1))) ? alphaSemiMatch
-                                : alphaNoMatch); // different symbol
-                int scoreLeft = opt[i][j - 1] + gap; // insertion
-                int scoreUp = opt[i - 1][j] + gap; // deletion
+                        (vowels.indexOf(seqA.charAt(i - 1)) == vowels.indexOf(seqB.charAt(j - 1))) ? alphaSemiMatch // Both
+                                                                                                                    // vowels
+                                                                                                                    // or
+                                                                                                                    // consonants
+                                : alphaNoMatch); // Different totally
+                int scoreLeft = opt[i][j - 1] + gap;
+                int scoreUp = opt[i - 1][j] + gap;
                 // we take the minimum
                 opt[i][j] = Math.min(Math.min(scoreDiag, scoreLeft), scoreUp);
                 optCost = (opt[i][j] < optCost) ? opt[i][j] : optCost;
@@ -44,9 +44,9 @@ public class SeqAlign {
         return opt[seqA.length()][seqB.length()];
     }
 
-    public int OPT_R() { // Iterative
+    public int OPT_R() { // Recursive
 
-        return 0;
+        return opt[seqA.length()][seqB.length()];
     }
 
     public void printMatrix() {
@@ -58,30 +58,26 @@ public class SeqAlign {
     }
 
     public void showMatch() {
-        int j = 1;
-        int i = 1;
-        String s1 = "";
-        String s2 = "";
+        int i = 0;
+        int j = 0;
+        String rA = "";
+        String rB = "";
         while (i < seqA.length()) {
-            // Need to use opt scores to determine what mutations happened to the string
-            // (starting from topright corner)
-            int compare = opt[i][j] - opt[i - 1][j - 1];
-            if (compare == match || compare == alphaSemiMatch || compare == alphaNoMatch) {
-                s1 += seqA.charAt(i);
-                s2 += seqB.charAt(j);
+            int compare = opt[i + 1][j + 1];
+            if (j >= seqB.length())
+                break;
+            if (compare - opt[i][j] != gap) {
+                rA += seqA.charAt(i);
+                rB += seqB.charAt(j);
                 i++;
                 j++;
-            } else if (compare == gap) {
-                s1 += seqA.charAt(i);
-                s2 += " ";
-                i++;
             } else {
-                System.out.println(compare);
-                break;
+                rA += seqA.charAt(i);
+                rB += " ";
+                i++;
             }
-            // System.out.println(String.format("%c\t%c", seqA.charAt(i), seqB.charAt(j)));
         }
-        System.out.println(s1);
-        System.out.println(s2);
+        System.out.println(rA);
+        System.out.println(rB);
     }
 }

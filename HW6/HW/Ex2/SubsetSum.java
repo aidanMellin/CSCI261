@@ -3,6 +3,7 @@ import java.io.*;
 
 public class SubsetSum {
     public static int[][] M;
+    public static boolean found;
 
     public static void main(String[] args) throws FileNotFoundException {
         // read input file
@@ -49,6 +50,8 @@ public class SubsetSum {
                     M[i][j] = (M[i - 1][j] == 1) ? 1 : (M[i - 1][j - itemWts[i - 1]] == 1) ? 1 : 0;
             }
         }
+        if (M[n][W] == 1)
+            found = true;
         return (M[n][W] == 1) ? W : 0;
     }
 
@@ -62,7 +65,9 @@ public class SubsetSum {
      *         with jobs[j]
      */
     public static int subsetSumR(int[] itemWts, int w, int i) {
-        return 0;
+        if (M[i][w] == 1)
+            return itemWts[i] + ((i < itemWts.length - 1) ? subsetSumR(itemWts, w - itemWts[i], i + 1) : 0);
+        return itemWts[i] + ((i < itemWts.length - 1) ? subsetSumR(itemWts, w, i + 1) : 0);
     }
 
     /**
@@ -76,8 +81,9 @@ public class SubsetSum {
      *         with jobs[j]
      */
     public static void showSolution(int[] itemWts, int w, int i) {
-        System.out.println((w > 0 && i > 0 && (M[i][w] == 1)) ? String.format("item %d wt: %d", i, itemWts[i]) : "");
-        if (w - itemWts[i] > 0 && i - 1 > 0)
+        System.out.println(
+                (w > 0 && i > 0 && (M[i - 1][w - 1] == 1)) ? String.format("item %d wt: %d", i, itemWts[i]) : "");
+        if (w - itemWts[i] > 1 && i - 1 > 1)
             showSolution(itemWts, w - itemWts[i], i - 1);
     }
 

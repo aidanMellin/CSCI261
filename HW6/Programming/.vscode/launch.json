@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "Test2",
             "projectName": "Programming_c055e907",
-            "args": "ex1.in"
+            "args": "ex2.in"
         }
     ]
 }
