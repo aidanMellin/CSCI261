@@ -36,43 +36,49 @@ public class SubsetSum {
      * weights from itemWts <= W that is compatible with jobs[j]
      */
     public static int subsetSumMem(int[] itemWts, int W) {
-        M = new int[itemWts.length][W + 1];
-        for (int w = 0; w < W; w++)
-            M[0][w] = 0;
-        for (int i = 1; i < itemWts.length; i++) {
-            for (int w = 0; w < W; w++) {
-                if (w < itemWts[i])
-                    M[i][w] = M[i - 1][w];
+        int n = itemWts.length;
+        M = new int[n + 1][W + 1];
+        for (int i = 0; i <= n; i++)
+            M[i][0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= W; j++) {
+                if (itemWts[i - 1] > j)
+                    M[i][j] = M[i - 1][j];
                 else
-                    M[i][w] = Math.max(M[i - 1][w], itemWts[i] + M[i - 1][w - itemWts[i]]);
+                    // Math.max(M[i - 1][j], M[i - 1][j - itemWts[i - 1]])
+                    M[i][j] = (M[i - 1][j] == 1) ? 1 : (M[i - 1][j - itemWts[i - 1]] == 1) ? 1 : 0;
             }
         }
-        return M[itemWts.length - 1][W];
-
+        return (M[n][W] == 1) ? W : 0;
     }
 
     /**
      *
-     * @ param int [] itemWts - an array of the weights of items, itemWts[i] is the
-     * weight of item i int w - the current capacity allowed int i - index of item
-     * under consideration @ return int - maximized sum of weights from itemWts <= W
-     * that is compatible with jobs[j]
+     * @param int[] itemWts - an array of the weights of items, itemWts[i] is the
+     *              weight of item i
+     * @param int   w - the current capacity allowed
+     * @param int   i - index of item under consideration
+     * @return int - maximized sum of weights from itemWts <= W that is compatible
+     *         with jobs[j]
      */
     public static int subsetSumR(int[] itemWts, int w, int i) {
-
-        // FINISH ME
         return 0;
     }
 
     /**
      *
      * @ param int [] itemWts - an array of the weights of items, itemWts[i] is the
-     * weight of item i int w - the current capacity allowed int i - index of item
-     * under consideration @ return int - maximized sum of weights from itemWts <= W
-     * that is compatible with jobs[j]
+     * weight of item i
+     * 
+     * @param int w - the current capacity allowed
+     * @param int i - index of item under consideration
+     * @return int - maximized sum of weights from itemWts <= W that is compatible
+     *         with jobs[j]
      */
     public static void showSolution(int[] itemWts, int w, int i) {
-        // FINISH ME
+        System.out.println((w > 0 && i > 0 && (M[i][w] == 1)) ? String.format("item %d wt: %d", i, itemWts[i]) : "");
+        if (w - itemWts[i] > 0 && i - 1 > 0)
+            showSolution(itemWts, w - itemWts[i], i - 1);
     }
 
 }

@@ -12,11 +12,11 @@
         },
         {
             "type": "java",
-            "name": "Launch SubsetSum",
+            "name": "Launch Test2",
             "request": "launch",
-            "mainClass": "SubsetSum",
-            "projectName": "Ex2_e0e4ffb1",
-            "args": "40in 389"
+            "mainClass": "Test2",
+            "projectName": "Programming_c055e907",
+            "args": "ex1.in"
         }
     ]
 }
